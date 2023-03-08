@@ -20,4 +20,7 @@ And.. enjoy !
 
 Very simple implementation, very fun.. PHP8.x and OpenAI Dalle API from 03.2023
 
+html side.. using html, css and jquery.
+
+
 
