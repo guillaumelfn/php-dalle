@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Generator using Dalle API</title>
+    <style>
+/* Default styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 32px;
+    text-align: center;
+    margin-top: 0;
+}
+
+p {
+    font-size: 18px;
+    margin-top: 0;
+}
+
+input[type="text"] {
+    font-size: 32px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    font-size: 36px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+#image-container {
+    margin-top: 20px;
+}
+
+/* Media queries for smaller screens */
+@media only screen and (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    input[type="text"] {
+        font-size: 16px;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 16px;
+        padding: 8px;
+        margin-top: 5px;
+    }
+
+    #image-container {
+        margin-top: 10px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Generator (using Dalle API)</h1>
+        <p>Enter the prompt below:</p>
+        <input type="text" id="prompt-input">
+        <button id="generate-btn">Generate Image</button>
+        <div id="image-container"></div>
+    </div>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+$(document).ready(function() {
+    // Handle button click event
+    $('#generate-btn').click(function() {
+        // Get the prompt value
+        var promptValue = $('#prompt-input').val();
+
+        // Show the "Generating Image..." message and disable the button
+        $('#image-container').html('<p>Generating Image...</p>');
+        $('#generate-btn').prop('disabled', true);
+
+        // Make an AJAX request to generator.php
+        $.ajax({
+            url: 'generator.php',
+            type: 'GET',
+            data: { prompt: promptValue },
+            xhrFields: {
+                responseType: 'blob' // Set the response type to blob
+            },
+            success: function(data) {
+                // If the request is successful, display the generated image and enable the button
+                var imageBlob = new Blob([data]);
+                var imageUrl = URL.createObjectURL(imageBlob);
+                $('#image-container').html('<img src="' + imageUrl + '">');
+                $('#generate-btn').prop('disabled', false);
+            },
+            error: function(xhr, status, error) {
+                // If the request fails, display an error message and enable the button
+                console.log(error);
+                $('#generate-btn').prop('disabled', false);
+            }
+        });
+    });
+});
+    </script>
+</body>
+</html>
